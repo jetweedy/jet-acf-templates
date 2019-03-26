@@ -6,11 +6,12 @@ A template engine for custom post type and custom field output.
 
 Generally speaking, it is a third piece of the "CPT-UI/ACF/..." trifecta for editing custom post types and displaying them in custom ways on your WordPress website without having to dig into your PHP code to code out custom display functionality.
 
-## Installation
+## Installation and Use
 
-Install [Custom Post Type UI (CPT UI)](https://wordpress.org/plugins/custom-post-type-ui/) plugin.
-Install the [Advanced Custom Fields](https://www.advancedcustomfields.com/) plugin.
-Download the php file and drop it in your wp-content/plugins folder.
+1. Install [Custom Post Type UI (CPT UI)](https://wordpress.org/plugins/custom-post-type-ui/) plugin.
+1. Install the [Advanced Custom Fields](https://www.advancedcustomfields.com/) plugin.
+1. Download the php file and drop it in your wp-content/plugins folder.
+1. Use markup (see sample below) in the content of pages that will display looped/paginated custom posts.
 
 ## Markup Sample
 There's not a lot of documentation for this yet. However if you don't want to have to dig around the code to figure out how to use it, here's a head start: some markup that is used on one of the websites that this plugin has been implemented on:
