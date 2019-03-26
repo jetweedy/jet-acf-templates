@@ -16,8 +16,6 @@ Generally speaking, it is a third piece of the "CPT-UI/ACF/..." trifecta for edi
 ## Markup Sample
 There's not a lot of documentation for this yet. However if you don't want to have to dig around the code to figure out how to use it, here's a head start: some markup that is used on one of the websites that this plugin has been implemented on:
 
-
-
 ```
 [jet-acf-template post-type="post" category="frontpage" posts_per_page="2"]
   <div class="news-item width-full">
@@ -36,3 +34,8 @@ There's not a lot of documentation for this yet. However if you don't want to ha
 [/jet-acf-template]
 ```
 
+## Planned
+
+* Single value references in multi-value array values (like checkboxes)
+* Logical blocks for pseudo-coding PHP
+* Markup for reading GET, POST and other variables
