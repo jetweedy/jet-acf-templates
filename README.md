@@ -20,27 +20,19 @@ There's not a lot of documentation for this yet. However if you don't want to ha
 
 ```
 [jet-acf-template post-type="post" category="frontpage" posts_per_page="2"]
-{if: field:block_width op:eq args:"full":}
-<div class="news-item width-full">{/if: field:block_width op:eq args:"full":}
-{if: field:block_width op:eq args:"half":}
-<div class="news-item width-half">{/if: field:block_width op:eq args:"half":}
-<a class="title" href="{:post_permalink:}">{:post_title:}</a>
-{if: field:image_width op:eq args:"full":}
-<img class="full" src="{:post_image:}" />
-{/if: field:image_width op:eq args:"full":}
-{if: field:image_width op:eq args:"left":}
-<img class="left" src="{:post_image:}" />
-{/if: field:image_width op:eq args:"left":}
-{if: field:image_width op:eq args:"right":}
-<img class="right" src="{:post_image:}" />
-{/if: field:image_width op:eq args:"right":}
-{:post_blurb:}
-<a href="{:post_permalink:}/"> Read more >> </a>
-{if: field:block_width op:eq args:"full":}</div>
-{/if: field:block_width op:eq args:"full":}
-{if: field:block_width op:eq args:"half":}
-</div>
-{/if: field:block_width op:eq args:"half":}
+  <div class="news-item width-full">
+    <a class="title" href="{:post_permalink:}">{:post_title:}</a>
+    {if: field:post_image op:neq args:"":}
+    <img class="full" src="{:post_image:}" />
+    {/if: field:post_image op:neq args:"":}
+    {:post_blurb:}
+    <ul>
+    {rf:languages:}
+      <li>{:language:}</li>
+    {/rf:languages:}
+    </ul>
+    <a href="{:post_permalink:}/"> Read more >> </a>
+    </div>
 [/jet-acf-template]
 ```
 
