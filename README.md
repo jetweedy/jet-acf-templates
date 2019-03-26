@@ -36,6 +36,6 @@ There's not a lot of documentation for this yet. However if you don't want to ha
 
 ## Planned
 
-* Single value references in multi-value array values (like checkboxes)
+* Single value references in multi-value array values (like checkboxes) using "array[]" bracket notation
 * Logical blocks for pseudo-coding PHP
 * Markup for reading GET, POST and other variables
