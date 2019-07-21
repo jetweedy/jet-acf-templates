@@ -28,6 +28,7 @@ Author URI: http://jonathantweedy.com
 */
 
 ini_set("display_errors", 1);
+
 remove_filter("the_content", "wptexturize");
 remove_filter("comment_text", "wptexturize");
 remove_filter("the_excerpt", "wptexturize");
@@ -47,7 +48,9 @@ function jetacf_content_filter($content) {
 class jetAcfTemplate {
     public static function checkCondition($value, $op, $argstr) {
 		$r = false;
-		$value = trim($value);
+		if (!is_array($value)) {
+			$value = trim($value);			
+		}
         $argsjson = "{\"args\":".$argstr."}";
         $args = json_decode($argsjson);
         $comp = $args->args;
@@ -67,6 +70,18 @@ class jetAcfTemplate {
                 $r = true;
             }
         }
+        if ($op=="has") {
+            if (is_array($value)) {
+				foreach($value as $v => $val) {
+					foreach($val as $k=>$kv) {
+						if ($kv==$comp) {
+							$r = true;
+						}
+					}
+				}
+            }
+        }
+//print_r($value); print "<hr />";
 //print "[$value] $op [$comp] :: $r <br />";	
         return $r;
     }
@@ -241,9 +256,6 @@ function jet_acf_template( $atts, $templatecontent ){
 						if (isset($postFields[$conditionalmatches[1][$ci]])) {
 							$fvalue = $postFields[$conditionalmatches[1][$ci]];
 						}
-						while(is_array($fvalue)) {
-							$fvalue = implode(", ", $fvalue);
-						}
 						$op = $conditionalmatches[2][$ci];
 						$arg = $conditionalmatches[3][$ci];
 						if( jetAcfTemplate::checkCondition($fvalue, $op, $arg) ) {
@@ -275,11 +287,6 @@ function jet_acf_template( $atts, $templatecontent ){
 					} else {
 						$value = get_field($field);
 					}
-					while (is_array($value)) {
-						print "<pre>"; print_r($value); print "</pre>";
-						$value = implode(", ", $value);
-					}
-					$value = trim($value);
 					$postcontent = str_replace("{:".$field.":}",$value,$postcontent);
 	//				$postcontent = str_replace("{:post_content:}",get_the_content(),$postcontent);
 	//				$postcontent = str_replace("{:post_title:}",get_the_title(),$postcontent);
