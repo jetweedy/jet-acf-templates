@@ -191,8 +191,8 @@ function jet_acf_template( $atts, $templatecontent ){
 		}
 		
 		
-    	$repeaterfieldpattern = "/\{rf:(.*?):\}(.*?)\{\/rf:\g{-2}:\}/s";
-    	$conditionalpattern = "/\{if: field:(.*?) op:(.*?) args?:(.*?):\}(.*?)\{\/if: field:\g{-4} op:\g{-3} args?:\g{-2}:\}/s";
+    	$repeaterfieldpattern = "/\{rf:(.*?):\}(.*)\{\/rf:\g{-2}:\}/s";
+    	$conditionalpattern = "/\{if: field:(.*?) op:(.*?) args?:(.*?):\}(.*)\{\/if: field:\g{-4} op:\g{-3} args?:\g{-2}:\}/s";
 		//// Simple loop through all queried posts
 	    $fieldvals = array();
 		
