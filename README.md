@@ -22,12 +22,12 @@ There's not a lot of documentation for this yet. However if you don't want to ha
     <a class="title" href="{:post_permalink:}">{:post_title:}</a>
     {if: field:post_image op:neq args:"":}
      <img class="full" src="{:post_image:}" />
-    {/if: field:post_image op:neq args:"":}
+    {/if}
     {:post_blurb:}
     <ul>
       {rf:languages:}
         <li>{:language:}</li>
-      {/rf:languages:}
+      {/rf}
     </ul>
     <a href="{:post_permalink:}/"> Read more >> </a>
     </div>
