@@ -33,7 +33,7 @@ remove_filter("the_content", "wptexturize");
 remove_filter("comment_text", "wptexturize");
 remove_filter("the_excerpt", "wptexturize");
 remove_filter( 'the_content', 'wpautop' );
-add_filter( 'the_content', 'wpautop' , 99);
+//add_filter( 'the_content', 'wpautop' , 99);
 function jetacf_content_filter($content) {
 	//// If jet-acf-template is not found in the content
     if ($content!=str_replace("jet-acf-template","",$content)) {
@@ -192,7 +192,7 @@ function jet_acf_template( $atts, $templatecontent ){
 		
 		
     	$repeaterfieldpattern = "/\{rf:(.*?):\}(.*)\{\/rf:\g{-2}:\}/s";
-    	$conditionalpattern = "/\{if: field:(.*?) op:(.*?) args?:(.*?):\}(.*)\{\/if: field:\g{-4} op:\g{-3} args?:\g{-2}:\}/s";
+    	$conditionalpattern = "/\{if: field:(.*?) op:(.*?) args?:(.*?):\}(.*?)\{\/if.*?}/s";
 		//// Simple loop through all queried posts
 	    $fieldvals = array();
 		
