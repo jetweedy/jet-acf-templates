@@ -203,6 +203,7 @@ function jet_acf_template( $atts, $templatecontent ){
 			if ($atts['posts_per_page']<1 || $pNum < $atts['posts_per_page']) {
 				$pNum++;
 				$post_id = get_the_id();
+				$postFields = array();
 				$postFields['post_id'] = $post_id;
 				$postFields['post_title'] = get_the_title();
 				$postFields['post_content'] = wpautop( get_the_content() );
