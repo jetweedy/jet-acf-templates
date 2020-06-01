@@ -179,6 +179,19 @@ function jet_acf_template( $atts, $templatecontent ){
 			}
 		};
 	
+		//// Fetch all fields that match the {$:variable:} pattern
+		$pattern = '/\{::([a-zA-Z0-9-_]*?)::\/?\}/s';
+		$jvars = array();
+		if (preg_match_all($pattern, $templatecontent, $matches)) {
+			if (!empty($matches)) {
+				foreach($matches[1] as $match) {
+					$jvars[] = $match;
+				}
+			}
+		}
+//        print_r($jvars);
+
+
 		//// Fetch all fields that match the generic {:field:} pattern
 		$pattern = "/\{:([a-zA-Z0-9-_]*?):\/?\}/s";
 		$fields = array();
@@ -189,6 +202,7 @@ function jet_acf_template( $atts, $templatecontent ){
 				}
 			}
 		}
+//        print_r($fields);
 		
 		
     	$repeaterfieldpattern = "/\{rf:(.*?):\}(.*)\{\/rf:\g{-2}:\}/s";
@@ -281,7 +295,19 @@ function jet_acf_template( $atts, $templatecontent ){
 						}
 					}
 				}
-				
+                				
+				foreach($jvars as $var) {
+                    if (isset($_POST[$var])) { 
+                        $x = $_POST[$var];
+                    } else if (isset($_GET[$var])) {
+                        $x = $_GET[$var];
+                    } else {
+                        $x = "";
+                    }
+					$postcontent = str_replace("{::".$var."::}",$x,$postcontent);                    
+                }
+
+
 				foreach($fields as $field) {
 					if (isset($postFields[$field])) {
 						$value = $postFields[$field];
