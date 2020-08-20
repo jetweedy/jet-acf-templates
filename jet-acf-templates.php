@@ -16,7 +16,6 @@ Author URI: http://jonathantweedy.com
 [jet-acf-template post-id="11"]<div>{:test_1:}<br />{:test_2:}</div>[/jet-acf-template]
 <hr />
 [jet-acf-template post-type="sample"]<div>{:test_1:}<br />{:test_2:}</div>[/jet-acf-template]
-
 [jet-acf-template post-type="news"]
 {if: field:test_1 op:eq args:"Test 1":}
 {:test_1:}
@@ -32,7 +31,7 @@ ini_set("display_errors", 1);
 remove_filter("the_content", "wptexturize");
 remove_filter("comment_text", "wptexturize");
 remove_filter("the_excerpt", "wptexturize");
-remove_filter( 'the_content', 'wpautop' );
+//remove_filter( 'the_content', 'wpautop' );
 //add_filter( 'the_content', 'wpautop' , 99);
 function jetacf_content_filter($content) {
 	//// If jet-acf-template is not found in the content
@@ -179,21 +178,8 @@ function jet_acf_template( $atts, $templatecontent ){
 			}
 		};
 	
-		//// Fetch all fields that match the {$:variable:} pattern
-		$pattern = '/\{::([a-zA-Z0-9-_]*?)::\/?\}/s';
-		$jvars = array();
-		if (preg_match_all($pattern, $templatecontent, $matches)) {
-			if (!empty($matches)) {
-				foreach($matches[1] as $match) {
-					$jvars[] = $match;
-				}
-			}
-		}
-//        print_r($jvars);
-
-
 		//// Fetch all fields that match the generic {:field:} pattern
-		$pattern = "/\{:([a-zA-Z0-9-_]*?):\/?\}/s";
+		$pattern = "/\{[:|\{]([a-zA-Z0-9-_]*?)[:|\}]\/?\}/s";
 		$fields = array();
 		if (preg_match_all($pattern, $templatecontent, $matches)) {
 			if (!empty($matches)) {
@@ -202,7 +188,6 @@ function jet_acf_template( $atts, $templatecontent ){
 				}
 			}
 		}
-//        print_r($fields);
 		
 		
     	$repeaterfieldpattern = "/\{rf:(.*?):\}(.*)\{\/rf:\g{-2}:\}/s";
@@ -295,25 +280,14 @@ function jet_acf_template( $atts, $templatecontent ){
 						}
 					}
 				}
-                				
-				foreach($jvars as $var) {
-                    if (isset($_POST[$var])) { 
-                        $x = $_POST[$var];
-                    } else if (isset($_GET[$var])) {
-                        $x = $_GET[$var];
-                    } else {
-                        $x = "";
-                    }
-					$postcontent = str_replace("{::".$var."::}",$x,$postcontent);                    
-                }
-
-
+				
 				foreach($fields as $field) {
 					if (isset($postFields[$field])) {
 						$value = $postFields[$field];
 					} else {
 						$value = get_field($field);
 					}
+					$postcontent = str_replace("{{".$field."}}",$value,$postcontent);
 					$postcontent = str_replace("{:".$field.":}",$value,$postcontent);
 	//				$postcontent = str_replace("{:post_content:}",get_the_content(),$postcontent);
 	//				$postcontent = str_replace("{:post_title:}",get_the_title(),$postcontent);
