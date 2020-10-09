@@ -190,7 +190,7 @@ function jet_acf_template( $atts, $templatecontent ){
 		}
 		
 		
-    	$repeaterfieldpattern = "/\{rf:(.*?):\}(.*)\{\/rf:\g{-2}:\}/s";
+    	$repeaterfieldpattern = "/\{rf:(.*?):(.*?)\}(.*?)\{\/rf:\g{-3}:\g{-2}\}/s";
     	$conditionalpattern = "/\{if: field:(.*?) op:(.*?) args?:(.*?):\}(.*?)\{\/if.*?}/s";
 		//// Simple loop through all queried posts
 	    $fieldvals = array();
@@ -235,15 +235,25 @@ function jet_acf_template( $atts, $templatecontent ){
 					for ($ri=0;$ri<count($repeatermatches[0]);$ri++) {
 						$repeateroutput = "";
 						$repeaterfield = $repeatermatches[1][$ri];
+						$repeaterdelimiter = $repeatermatches[2][$ri];  
 						$children = get_field($repeaterfield);
-						$childtemplate = $repeatermatches[2][$ri];
-						foreach($children as $child) {
-							$repetition = $childtemplate;
-							foreach($child as $pat=>$val) {
-								$fieldvals[$post_id."__".$repeaterfield."__".$pat][] = $val;
-								$repetition = str_replace("{:".$pat.":}",$val,$repetition);
+						$childtemplate = $repeatermatches[3][$ri];
+						if (is_array($children) && count($children) > 0 ) {
+							$useDelimiter = false;
+							foreach($children as $child) {
+								$repetition = $childtemplate;
+								foreach($child as $pat=>$val) {
+									$fieldvals[$post_id."__".$repeaterfield."__".$pat][] = $val;
+									$repetition = str_replace("{:".$pat.":}",$val,$repetition);
+								}
+								if ($useDelimiter) { 
+									$repeateroutput .= $repeaterdelimiter;
+								}
+								$repeateroutput .= $repetition;
+								$useDelimiter = true;
 							}
-							$repeateroutput .= $repetition;
+
+//							$repeateroutput .= $repetition;
 						}
 						$postcontent = str_replace($repeatermatches[0][$ri],$repeateroutput,$postcontent);
 					}
