@@ -100,6 +100,17 @@ function jet_acf_template( $atts, $templatecontent ){
 	
 	$templatecontent = str_replace("\n","",$templatecontent);
 
+    //// Replace special link markup (in case WP is being a bitch about it)
+    //// Format: 
+    ////    {:link:_blank?:<url>}<text>{:/link:}
+	$templatecontent = preg_replace("/{:link:_blank:(.*?):}(.*?){:\/link:}/"
+									, "<a target='_blank' href=\"{:$1:}\">$2</a>"
+									, $templatecontent);				
+
+	$templatecontent = preg_replace("/{:link:(.*?):}(.*?){:\/link:}/"
+									, "<a href=\"{:$1:}\">$2</a>"
+									, $templatecontent);		
+	
 	$content = "";
 	
 	$queryParams = array();	
