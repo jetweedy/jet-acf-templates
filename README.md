@@ -2,9 +2,11 @@
 
 A template engine for custom post type and custom field output.
 
-  This plugin hasn't been very well documented yet, but has been tested a great deal on a few sites including [chip.unc.edu](https:chip.unc.edu), [enable.unc.edu](https://enable.unc.edu), and [stationpubrun.com](https://stationpubrun.com). It basically allows you to use some markup within two \[jet-acf-template\] shorttags to display single or looped posts according to categories, post types, etc, as well as limit and paginate the results that come back up.
+This plugin hasn't been very well documented yet, but has been tested a great deal on a few sites including [chip.unc.edu](https:chip.unc.edu), [enable.unc.edu](https://enable.unc.edu), and [stationpubrun.com](https://stationpubrun.com). It basically allows you to use some markup within two \[jet-acf-template\] shorttags to display single or looped posts according to categories, post types, etc, as well as limit and paginate the results that come back up.
 
-Generally speaking, it is a third piece of the "CPT-UI/ACF/..." trifecta for editing custom post types and displaying them in custom ways on your WordPress website without having to dig into your PHP code to code out custom display functionality.
+## Purpose
+
+Generally speaking, this acts as a third piece of the "CPT-UI/ACF/..." trifecta for editing custom post types and displaying them in custom ways on your WordPress website without having to dig into your PHP code to code out custom display functionality. Great plugins exist for managing content types and taxonomies, but I have found that it's quite difficult to actually leverage those content types with markup within the WP editing space without digging into the underlying PHP and writing additional display code for the types. This lets you include some ad hoc markup in regular page to display sets of filtered/sorted custom post content simply by including custom markup in the editing fields.
 
 ## Installation and Use
 
