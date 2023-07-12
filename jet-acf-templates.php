@@ -26,13 +26,16 @@ Author URI: http://jonathantweedy.com
 [/jet-acf-template]
 */
 
-ini_set("display_errors", 1);
+
+ini_set("display_errors", 0);
+if (isset($_GET["debug"]))
+	ini_set("display_errors", 1);
 
 remove_filter("the_content", "wptexturize");
 remove_filter("comment_text", "wptexturize");
 remove_filter("the_excerpt", "wptexturize");
 //remove_filter( 'the_content', 'wpautop' );
-//add_filter( 'the_content', 'wpautop' , 99);
+add_filter( 'the_content', 'wpautop' , 99);
 function jetacf_content_filter($content) {
 	//// If jet-acf-template is not found in the content
     if ($content!=str_replace("jet-acf-template","",$content)) {
@@ -100,23 +103,12 @@ function jet_acf_template( $atts, $templatecontent ){
 	
 	$templatecontent = str_replace("\n","",$templatecontent);
 
-    //// Replace special link markup (in case WP is being a bitch about it)
-    //// Format: 
-    ////    {:link:_blank?:<url>}<text>{:/link:}
-	$templatecontent = preg_replace("/{:link:_blank:(.*?):}(.*?){:\/link:}/"
-									, "<a target='_blank' href=\"{:$1:}\">$2</a>"
-									, $templatecontent);				
-
-	$templatecontent = preg_replace("/{:link:(.*?):}(.*?){:\/link:}/"
-									, "<a href=\"{:$1:}\">$2</a>"
-									, $templatecontent);		
-	
 	$content = "";
 	
 	$queryParams = array();	
 	
 	$post_id = false;
-	if ($_GET['post_id']) {
+	if (isset($_GET['post_id'])) {
 		$post_id = $_GET['post_id'];
 	}
 	if (!!$post_id) {
@@ -149,6 +141,12 @@ function jet_acf_template( $atts, $templatecontent ){
 		}
 	}
 	
+	if (!isset($atts['orderby'])) {
+		$atts['orderby'] = "ID";
+	}
+	if (!isset($atts['order'])) {
+		$atts['order'] = "DESC";
+	}
 	$atts['orderby'] = trim($atts['orderby']);
 	if (strtoupper($atts['order']!="DESC")) {
 		$atts['order'] = "ASC";
@@ -201,7 +199,7 @@ function jet_acf_template( $atts, $templatecontent ){
 		}
 		
 		
-    	$repeaterfieldpattern = "/\{rf:(.*?):(.*?)\}(.*?)\{\/rf:\g{-3}:\g{-2}\}/s";
+    	$repeaterfieldpattern = "/\{rf:(.*?):\}(.*)\{\/rf:\g{-2}:\}/s";
     	$conditionalpattern = "/\{if: field:(.*?) op:(.*?) args?:(.*?):\}(.*?)\{\/if.*?}/s";
 		//// Simple loop through all queried posts
 	    $fieldvals = array();
@@ -246,25 +244,15 @@ function jet_acf_template( $atts, $templatecontent ){
 					for ($ri=0;$ri<count($repeatermatches[0]);$ri++) {
 						$repeateroutput = "";
 						$repeaterfield = $repeatermatches[1][$ri];
-						$repeaterdelimiter = $repeatermatches[2][$ri];  
 						$children = get_field($repeaterfield);
-						$childtemplate = $repeatermatches[3][$ri];
-						if (is_array($children) && count($children) > 0 ) {
-							$useDelimiter = false;
-							foreach($children as $child) {
-								$repetition = $childtemplate;
-								foreach($child as $pat=>$val) {
-									$fieldvals[$post_id."__".$repeaterfield."__".$pat][] = $val;
-									$repetition = str_replace("{:".$pat.":}",$val,$repetition);
-								}
-								if ($useDelimiter) { 
-									$repeateroutput .= $repeaterdelimiter;
-								}
-								$repeateroutput .= $repetition;
-								$useDelimiter = true;
+						$childtemplate = $repeatermatches[2][$ri];
+						foreach($children as $child) {
+							$repetition = $childtemplate;
+							foreach($child as $pat=>$val) {
+								$fieldvals[$post_id."__".$repeaterfield."__".$pat][] = $val;
+								$repetition = str_replace("{:".$pat.":}",$val,$repetition);
 							}
-
-//							$repeateroutput .= $repetition;
+							$repeateroutput .= $repetition;
 						}
 						$postcontent = str_replace($repeatermatches[0][$ri],$repeateroutput,$postcontent);
 					}
