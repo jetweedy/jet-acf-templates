@@ -142,7 +142,7 @@ function jet_acf_template( $atts, $templatecontent ){
 	}
 	
 	if (!isset($atts['orderby'])) {
-		$atts['orderby'] = "ID";
+		$atts['orderby'] = "";
 	}
 	if (!isset($atts['order'])) {
 		$atts['order'] = "DESC";
